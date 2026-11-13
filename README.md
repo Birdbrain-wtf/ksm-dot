@@ -36,7 +36,8 @@ python3 issuance.py --days 180   # or take a fresh reading up to the latest bloc
 | `crosscheck.py` | Matches the last 365 days against CoinGecko |
 | `issuance.py` | Reads `Balances.TotalIssuance` and `Timestamp.now` from each Asset Hub over public RPC |
 | `index.html` | The page itself. All of its sums run in the browser, in the `<script>` at the bottom |
-| `daily.sh` | What Birdbrain's server runs at 06:15 UTC each day: fetch, publish, commit here |
+| `daily.sh` | What Birdbrain's server runs at 06:15 UTC each day to refresh the page |
+| `.github/workflows/daily.yml` | At 06:45 UTC, copies what the page is serving into `data/`, reruns `verify.py` and commits |
 
 The commit history of `data/` is the record of what the page showed on each day.
 

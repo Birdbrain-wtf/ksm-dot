@@ -1,0 +1,28 @@
+name: Record the day's prices
+# Birdbrain's server refreshes the prices at 06:15 UTC. At 06:45 this copies exactly
+# what birdbrain.wtf/tools/ksm-dot is serving into data/ and commits it, so the history
+# of this folder is a public, dated record of what the page showed.
+on:
+  schedule:
+    - cron: "45 6 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download what the page serves
+        run: |
+          curl -fsS -o data/data.json https://birdbrain.wtf/tools/ksm-dot/data.json
+          curl -fsS -o data/data.csv https://birdbrain.wtf/tools/ksm-dot/data.csv
+          python3 -c "import json; r=json.load(open('data/data.json'))['rows']; assert len(r) > 2000, len(r)"
+      - name: Recompute the figures
+        run: python3 verify.py data/data.csv
+      - name: Commit if anything changed
+        run: |
+          git config user.name Birdbrain
+          git config user.email hello@birdbrain.wtf
+          git add data/data.json data/data.csv
+          git diff --cached --quiet || { git commit -m "Prices to $(tail -1 data/data.csv | cut -d, -f1)" && git push; }
