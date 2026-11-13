@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KSM and DOT after the cap · Birdbrain</title>
+<meta name="description" content="Polkadot capped DOT's supply in March 2026. Kusama kept issuing. KSM and DOT prices since launch, with the cap's dates marked, so you can see what changed.">
+<meta property="og:title" content="KSM and DOT after the cap · Birdbrain">
+<meta property="og:description" content="Polkadot capped DOT's supply. Kusama kept issuing. Seven years of prices, with the dates marked.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://birdbrain.wtf/tools/ksm-dot">
+<meta property="og:image" content="https://birdbrain.wtf/tools/ksm-dot/social.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://birdbrain.wtf/tools/ksm-dot/social.png">
+<style>
+:root{--ink:#202a31;--muted:#596771;--line:#dfe4e7;--soft:#f6f8f9;--ksm:#3b5bdb;--dot:#c2255c;--ease:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 75% 10%,#f3f5f7,transparent 40%),#fff;color:var(--ink);font:16px/1.7 Inter,Arial,sans-serif}
+a{color:inherit;text-underline-offset:5px}
+button,input{font:inherit;color:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #526875;outline-offset:4px}
+.eyebrow{font:11px/1.6 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.14em}
+.muted{color:var(--muted)}
+main{max-width:1120px;margin:auto;padding:0 5vw}
+h1,h2,h3{font-style:normal;font-weight:400;line-height:1.08;letter-spacing:-.04em}
+h1{font-size:clamp(36px,4.4vw,56px);margin:20px 0 24px;max-width:820px}
+h2{font-size:clamp(26px,2.8vw,36px);margin:12px 0 18px}
+h3{font-size:20px;margin:0 0 8px;letter-spacing:-.02em}
+p{max-width:680px}
+.hero{padding:28px 0 20px}
+.lead{font-size:18px;color:var(--muted);max-width:660px}
+section{padding:32px 0;border-top:1px solid var(--line)}
+blockquote{margin:0;border-left:2px solid var(--line);padding:4px 0 4px 18px;color:var(--muted);max-width:720px}
+blockquote p{margin:.3em 0}
+blockquote cite{font-style:normal;font-size:13px}
+.claims{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:26px}
+.claims article{padding:22px 20px 22px 0}
+.claims article+article{border-left:1px solid var(--line);padding-left:20px}
+.claims .q{font-size:14px;color:var(--muted);margin:0 0 12px;min-height:3.2em}
+.big{font-size:clamp(34px,3.6vw,46px);letter-spacing:-.04em;line-height:1.05;font-variant-numeric:tabular-nums}
+.big small{font-size:.4em;letter-spacing:0;color:var(--muted)}
+.claims .a{font-size:14px;margin:10px 0 0}
+.verdict{display:inline-block;border:1px solid #bfc9d0;border-radius:30px;padding:2px 11px;font:11px/1.8 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.1em;margin-top:12px}
+.verdict.yes{border-color:rgba(16,185,129,.7)}.verdict.part{border-color:rgba(245,158,11,.8)}
+.controls{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;margin:8px 0 14px}
+.seg{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:40px;padding:4px;background:#fff;flex-wrap:wrap}
+.seg .eyebrow{padding:0 10px 0 12px;color:var(--muted)}
+.seg button{border:0;background:none;border-radius:40px;padding:7px 15px;cursor:pointer;font-size:14px;transition:background .45s var(--ease),color .45s var(--ease)}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff}
+.chartwrap{position:relative;border:1px solid var(--line);background:#fff;padding:14px 10px 6px}
+svg.chart{display:block;width:100%;height:auto;overflow:visible;font-family:Inter,Arial,sans-serif}
+.grid line{stroke:#eef1f3}
+.axis text{fill:var(--muted);font-size:11px}
+.ev line{stroke:#8d9aa3;stroke-dasharray:3 4}
+.ev text{fill:var(--ink);font-size:11px}
+.after{fill:rgba(139,92,246,.05)}
+.tip{position:absolute;pointer-events:none;background:#fff;border:1px solid var(--line);box-shadow:0 6px 24px rgba(32,42,49,.08);padding:9px 12px;font-size:13px;line-height:1.5;min-width:150px;opacity:0;transition:opacity .15s}
+.tip b{font-weight:600}
+.tip .sw{display:inline-block;width:10px;height:2px;vertical-align:middle;margin-right:6px}
+.legend{display:flex;gap:18px;font-size:13px;color:var(--muted);margin:10px 4px 0;flex-wrap:wrap}
+.legend span::before{content:"";display:inline-block;width:16px;height:2px;vertical-align:middle;margin-right:7px;background:var(--c)}
+.caption{font-size:14px;color:var(--muted);margin-top:12px;max-width:760px}
+.compare{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:18px}
+.compare>div{padding:18px 18px 18px 0}
+.compare>div+div{border-left:1px solid var(--line);padding-left:18px}
+.compare .lbl{font-size:13px;color:var(--muted)}
+.slider{display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:15px}
+.slider input{width:240px;accent-color:#202a31}
+.supply{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:10px}
+.supply article{border-top:2px solid var(--c);padding-top:14px}
+.bar{height:10px;background:#eef1f3;border-radius:10px;overflow:hidden;margin:12px 0 6px}
+.bar i{display:block;height:100%;background:var(--c);border-radius:10px;width:0;transition:width 1.2s var(--ease)}
+details{border-top:1px solid var(--line);padding:14px 0}
+summary{cursor:pointer}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px;font-variant-numeric:tabular-nums}
+th{font-weight:400;color:var(--muted);text-align:right;padding:6px 0;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+td{border-top:1px solid var(--line);padding:6px 0;text-align:right}
+.tablebox{max-height:420px;overflow:auto}
+ul.notes{padding-left:1.1em;max-width:720px}ul.notes li{margin:.5em 0}
+pre.cmd{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;max-width:720px;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}
+footer{padding:35px 5vw;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:25px;font-size:12px;color:var(--muted)}
+#err{color:#9b2c2c}
+[hidden]{display:none!important}
+@media(max-width:820px){.claims,.compare,.supply{grid-template-columns:1fr}.claims article+article,.compare>div+div{border-left:0;padding-left:0;border-top:1px solid var(--line)}footer{display:block}.claims .q{min-height:0}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<!--bb-chrome-head--><link rel="stylesheet" href="/assets/bb-chrome.css?v=20261112b"><!--/bb-chrome-head-->
+</head>
+<body>
+<!--bb-chrome-nav-->
+<nav class="bbx">
+<div class="nav-in">
+<a class="mark" href="/">
+<svg width="34" height="15" viewBox="0 0 106 46" aria-hidden="true">
+<g transform="translate(0 26) scale(.46)"><polygon class="f f1" points="0,28 34,0 36,12 6,30" fill="rgba(10,10,10,.05)" stroke="#b6bbc2" stroke-width="2.4"/><polygon class="f f1" points="36,12 70,28 40,30 34,18" fill="rgba(10,10,10,.05)" stroke="#b6bbc2" stroke-width="2.4"/></g>
+<g transform="translate(26 13) scale(.56)"><polygon class="f f2" points="0,28 34,0 36,12 6,30" fill="rgba(10,10,10,.05)" stroke="#b6bbc2" stroke-width="2.1"/><polygon class="f f2" points="36,12 70,28 40,30 34,18" fill="rgba(10,10,10,.05)" stroke="#b6bbc2" stroke-width="2.1"/></g>
+<g transform="translate(56 1) scale(.7)"><polygon class="f f3" points="0,28 34,0 36,12 6,30" fill="rgba(10,10,10,.05)" stroke="#b6bbc2" stroke-width="1.8"/><polygon class="f f3" points="36,12 70,28 40,30 34,18" fill="rgba(10,10,10,.05)" stroke="#b6bbc2" stroke-width="1.8"/></g>
+</svg>
+Birdbrain <span class="experiment">EXPERIMENT</span></a>
+<div class="nav-actions">
+<div class="more" id="more"><button class="more-btn" id="moreBtn" type="button" aria-expanded="false" aria-controls="exploreMenu">Explore <span aria-hidden="true">⌄</span></button>
+<div class="menu" id="exploreMenu"><span class="grp">Birdbrain</span><a href="/birdbrain"><span class="row"><svg class="mk prism" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L23 21H1ZM12 2v12L1 21M12 14l11 7M6.5 11.5h11L12 21Z"/></svg><span class="nm">About Birdbrain</span></span><span class="id">/birdbrain</span></a><a href="/editorial/birdbrain"><span class="row"><svg class="mk" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.8h6.6c.8 0 1.4.6 1.4 1.4v13c0-.8-.6-1.4-1.4-1.4H4V4.8zM20 4.8h-6.6c-.8 0-1.4.6-1.4 1.4v13c0-.8.6-1.4 1.4-1.4H20V4.8z"/></svg><span class="nm">Read our journal</span></span><span class="id">/editorial/birdbrain</span></a><a href="/chaos/join"><span class="row"><svg class="mk" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.6" y="6" width="13" height="12" rx="2.2"/><path d="m15.6 12.6 5.8 3.4V8l-5.8 3.4v1.2z"/></svg><span class="nm">Join a call</span></span><span class="id">/chaos/join</span></a><a href="/chaos-sessions"><span class="row"><svg class="mk" viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 3.5a7 7 0 1 0 0 14 7 7 0 1 0 0-14z"/><path d="m15.45 15.45 4.55 4.55"/></svg><span class="nm">Chaos Sessions</span></span><span class="id">/chaos-sessions</span></a><a href="/docs"><span class="row"><svg class="mk" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.4 3H6.8A1.8 1.8 0 0 0 5 4.8v14.4A1.8 1.8 0 0 0 6.8 21h10.4a1.8 1.8 0 0 0 1.8-1.8V8.4L13.4 3z"/><path d="M13.4 3v5.4H19M8.6 13h6.8M8.6 16.6h4.6"/></svg><span class="nm">Documentation</span></span><span class="id">/docs</span></a><a href="/download"><span class="row"><svg class="mk" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v11M7.5 10.5 12 15l4.5-4.5M4.5 15.5v3a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-3"/></svg><span class="nm">Get the app</span></span><span class="id">/download</span></a><span class="grp col">Networks</span><a href="/networks/solo"><span class="row"><svg class="mk" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.8a2.2 2.2 0 1 0 0 4.4 2.2 2.2 0 1 0 0-4.4zM5.5 15.8a2.2 2.2 0 1 0 0 4.4 2.2 2.2 0 1 0 0-4.4zM18.5 15.8a2.2 2.2 0 1 0 0 4.4 2.2 2.2 0 1 0 0-4.4z"/><path d="M10.9 7.9 6.6 15.9M13.1 7.9l4.3 8M7.7 18h8.6"/></svg><span class="nm">Solo chain</span></span><span class="id">/networks/solo</span></a><a href="/networks/kabocha"><span class="row"><svg class="mk" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7.2c-4.6 0-8.2 2.7-8.2 6.4S7.4 20 12 20s8.2-2.7 8.2-6.4S16.6 7.2 12 7.2z"/><path d="M12 7.2c-1.9 0-3.1 2.9-3.1 6.4S10.1 20 12 20s3.1-2.9 3.1-6.4S13.9 7.2 12 7.2zM12 7.2c0-1.5.6-2.6 1.8-3.2"/></svg><span class="nm">Kabocha</span></span><span class="id">/networks/kabocha</span></a><a href="/networks/kusama"><span class="row"><svg class="mk" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 9.4 12 4l8.5 5.4z"/><path d="M5.6 10.2v7.4M9.9 10.2v7.4M14.1 10.2v7.4M18.4 10.2v7.4M3.5 20h17"/></svg><span class="nm">Kusama treasury</span></span><span class="id">/networks/kusama</span></a><a href="/explorer"><span class="row"><svg class="mk" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.8 3.8h6.6v6.6H3.8zM13.6 3.8h6.6v6.6h-6.6zM3.8 13.6h6.6v6.6H3.8z"/><path d="M13.6 13.6h6.6v6.6h-6.6zM10.4 7.1h3.2M7.1 10.4v3.2"/></svg><span class="nm">Birdbrain on chain</span></span><span class="id">/explorer</span></a><span class="grp">Tools</span><a href="/tools/cdd"><span class="row"><svg class="mk" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.8 11.2h16.4v9H3.8z"/><path d="M8.2 11.2V4.2h7.6v7M10.4 7.6h3.2M8.6 15.6h6.8"/></svg><span class="nm">Decision deposits</span></span><span class="id">/tools/cdd</span></a><a href="/tools/ksm-dot" aria-current="page"><span class="row"><svg class="mk" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 20.5h17"/><path d="M4 15.5l5-5 4 3 7-8M4 8.5l5 4.5 4-2 7 5.5"/></svg><span class="nm">KSM and DOT</span></span><span class="id">/tools/ksm-dot</span></a><a class="menu-door" href="/birdbrain/signin">Sign in</a></div>
+</div>
+<div class="me-slot" id="meSlot"><a class="btn" href="/birdbrain/signin">Sign in</a></div>
+</div>
+</div>
+</nav>
+<script defer src="/assets/bb-chrome.js?v=20261112b"></script>
+<!--/bb-chrome-nav-->
+<main>
+<div class="hero">
+  <div class="eyebrow muted">Kusama and Polkadot</div>
+  <h1>KSM and DOT, before and after the cap</h1>
+  <p class="lead">On 14 March 2026 Polkadot cut new DOT by more than half and capped the supply at 2.1 billion. Kusama kept issuing at about 10% a year. If issuance drives price, KSM should have lost ground to DOT since then. Here is what the prices say.</p>
+  <blockquote>
+    <p>"Over the last couple of years, KSM has traded highly correlated with DOT's price against other tokens &amp; fiat. And 8 months of data isn't a lot, but KSM/DOT is doing better than it was before DOT switched to fixed supply cap model. … I'm at least comfortable to claim that KSM held its ground relative to DOT."</p>
+    <cite>Lederstrumpf, <a href="https://forum.polkadot.network/t/proposal-discussion-adapting-kusama-to-demand-and-its-jam-future/17141/23">Polkadot forum, 13 November 2026</a></cite>
+  </blockquote>
+  <div class="claims" id="claims">
+    <article>
+      <p class="q">1. KSM moves with DOT</p>
+      <div class="big" id="c1">…</div>
+      <p class="a" id="c1a"></p>
+      <span class="verdict" id="c1v"></span>
+    </article>
+    <article>
+      <p class="q">2. KSM/DOT is doing better than before the cap</p>
+      <div class="big" id="c2">…</div>
+      <p class="a" id="c2a"></p>
+      <span class="verdict" id="c2v"></span>
+    </article>
+    <article>
+      <p class="q">3. KSM held its ground against DOT</p>
+      <div class="big" id="c3">…</div>
+      <p class="a" id="c3a"></p>
+      <span class="verdict" id="c3v"></span>
+    </article>
+  </div>
+  <p id="err" hidden></p>
+</div>
+
+<section id="chartsec">
+  <h2>KSM against DOT, day by day</h2>
+  <div class="controls">
+    <div class="seg" role="group" aria-label="View"><span class="eyebrow">Show</span>
+      <button data-view="ratio" aria-pressed="true">KSM in DOT</button>
+      <button data-view="index" aria-pressed="false">Both prices from one start</button>
+      <button data-view="corr" aria-pressed="false">How closely they move</button>
+    </div>
+    <div class="seg" role="group" aria-label="Time range"><span class="eyebrow">Since</span>
+      <button data-range="all" aria-pressed="false">Launch</button>
+      <button data-range="2y" aria-pressed="false">2 years</button>
+      <button data-range="prop" aria-pressed="true">The proposal</button>
+    </div>
+  </div>
+  <div class="controls" id="baseRow" hidden>
+    <div class="seg" role="group" aria-label="Start both prices at"><span class="eyebrow">Start at</span>
+      <button data-base="prop" aria-pressed="false">Proposed</button>
+      <button data-base="vote" aria-pressed="false">Approved</button>
+      <button data-base="cap" aria-pressed="true">In force</button>
+    </div>
+  </div>
+  <div class="chartwrap" id="wrap">
+    <svg class="chart" id="chart" viewBox="0 0 1000 420" role="img" aria-labelledby="chartTitle"><title id="chartTitle">KSM priced in DOT</title></svg>
+    <div class="tip" id="tip"></div>
+  </div>
+  <div class="legend" id="legend"></div>
+  <p class="caption" id="caption"></p>
+</section>
+
+<section>
+  <h2>Before and after, side by side</h2>
+  <p>A single day can mislead. DOT rallied into the cap, and KSM/DOT hit its lowest level ever on 28 February 2026, two weeks before it took effect. Averages over a window either side are fairer. Pick the window.</p>
+  <div class="slider">
+    <label for="win">Months either side of 14 March 2026</label>
+    <input type="range" id="win" min="1" max="8" value="8" step="1">
+    <b id="winLbl">8</b>
+  </div>
+  <div class="compare">
+    <div><div class="lbl" id="bLbl">Average before</div><div class="big" id="bVal">…</div></div>
+    <div><div class="lbl" id="aLbl">Average after</div><div class="big" id="aVal">…</div></div>
+    <div><div class="lbl">Change</div><div class="big" id="dVal">…</div></div>
+  </div>
+  <p class="caption" id="baseline"></p>
+</section>
+
+<section>
+  <h2>What each chain is issuing now</h2>
+  <p>Measured from each chain's total supply on Asset Hub, 18 May to 13 November 2026, then annualised.</p>
+  <div class="supply">
+    <article style="--c:var(--ksm)">
+      <h3>Kusama</h3>
+      <div class="big">10.5%<small> a year</small></div>
+      <div class="bar"><i data-w="100"></i></div>
+      <p class="muted">About 1.87 million new KSM a year on a supply of 19.1 million. No cap. Holders can change this by vote.</p>
+    </article>
+    <article style="--c:var(--dot)">
+      <h3>Polkadot</h3>
+      <div class="big">3.4%<small> a year</small></div>
+      <div class="bar"><i data-w="32"></i></div>
+      <p class="muted">About 56 million new DOT a year on 1.71 billion, down from 120 million before 14 March 2026. Capped at 2.1 billion, stepping down every two years.</p>
+    </article>
+  </div>
+  <p class="caption">So since March, new KSM has arrived about three times as fast as new DOT, relative to supply. If that alone set the price, the KSM/DOT line above would be falling.</p>
+</section>
+
+<section id="check">
+  <h2>Check the numbers</h2>
+  <p>Every figure above is worked out in your browser from one file of daily prices. Download it and do the sums yourself, or run ours.</p>
+  <ul class="notes">
+    <li><b>The prices</b> · <a href="/tools/ksm-dot/data.csv" download>CSV</a> or <a href="/tools/ksm-dot/data.json" download>JSON</a>. One row a day: date, KSM in US dollars, DOT in US dollars.</li>
+    <li><b>The method</b> · <a href="https://github.com/Birdbrain-wtf/ksm-dot">github.com/Birdbrain-wtf/ksm-dot</a>. Three short Python scripts with nothing to install: one redoes every figure on this page, one reads each chain's supply at the blocks we used, one checks the prices against CoinGecko.</li>
+    <li><b>The history</b> · the prices are committed there every day, so you can see what this page showed on any date since it went up.</li>
+  </ul>
+  <pre class="cmd"><code>git clone https://github.com/Birdbrain-wtf/ksm-dot
+cd ksm-dot &amp;&amp; python3 verify.py</code></pre>
+</section>
+
+<section>
+  <h2>What this shows and what it does not</h2>
+  <ul class="notes">
+    <li>Prices are one daily close in US dollars. KSM in DOT is the KSM price divided by the DOT price. Dividing removes whatever moves the whole market, which is why it is the fair test.</li>
+    <li>"How closely they move" is the correlation of daily price changes over the last 90 days: 1 means they always move together, 0 means no relationship.</li>
+    <li>Eight months is short. Prices answer to many things at once, so this cannot prove that issuance does not matter. It can show whether the effect people predicted is visible yet.</li>
+    <li>Where you start counting changes the answer. Measured from the day the cap took effect, KSM has gained on DOT. Measured against the year before the cap was proposed, KSM buys fewer DOT than it did. Both are on this page.</li>
+    <li>The issuance figures are a fixed reading, not live. Everything else updates once a day.</li>
+  </ul>
+  <details>
+    <summary>Key dates</summary>
+    <ul class="notes">
+      <li><b>15 August 2025</b> · Polkadot <a href="https://polkadot.subsquare.io/referenda/1710">referendum 1710</a> proposes a hard cap of 2.1 billion DOT.</li>
+      <li><b>14 September 2025</b> · Approved with 81% in favour.</li>
+      <li><b>14 March 2026</b> · In force: new DOT falls from 120 million to about 55 million a year (<a href="https://forum.polkadot.network/t/changes-on-polkadot-in-march-2026/17101">Polkadot forum</a>).</li>
+      <li><b>13 November 2026</b> · Lederstrumpf's post, eight months on.</li>
+    </ul>
+  </details>
+  <details>
+    <summary>The numbers as a table, month by month</summary>
+    <div class="tablebox"><table id="tbl"><thead><tr><th>Month end</th><th>KSM (US$)</th><th>DOT (US$)</th><th>KSM in DOT</th></tr></thead><tbody></tbody></table></div>
+  </details>
+</section>
+</main>
+<footer><span>Birdbrain is a Decent initiative that tests, learns and educates in public.</span><span id="src">Prices: Yahoo Finance daily close, checked against CoinGecko. <a href="#check">Check the numbers</a>.</span></footer>
+
+<script>
+(() => {
+const EV = [
+  { k: "prop", d: "2025-08-15", t: "Cap proposed" },
+  { k: "vote", d: "2025-09-14", t: "Approved" },
+  { k: "cap",  d: "2026-03-14", t: "Cap in force" },
+];
+const CAP = "2026-03-14";
+const $ = (id) => document.getElementById(id);
+const NS = "http://www.w3.org/2000/svg";
+const el = (tag, attrs = {}, text) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; return e; };
+const fmtD = (s) => new Date(s + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+const pct = (x) => (x >= 0 ? "+" : "−") + Math.abs(x * 100).toFixed(0) + "%";
+const usd = (x) => "$" + (x >= 100 ? x.toFixed(0) : x >= 10 ? x.toFixed(1) : x.toFixed(2));
+const addMonths = (s, m) => { const d = new Date(s + "T00:00:00Z"); d.setUTCMonth(d.getUTCMonth() + m); return d.toISOString().slice(0, 10); };
+
+let rows = [], both = [], state = { view: "ratio", range: "prop", base: "cap" };
+
+fetch("/tools/ksm-dot/data.json", { cache: "no-cache" }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(init).catch(e => { const m = $("err"); m.hidden = false; m.textContent = "The price data did not load (" + e.message + "). Try again in a minute."; });
+
+function corrOf(a, b) {
+  const n = a.length; if (n < 10) return null;
+  let ma = 0, mb = 0; for (let i = 0; i < n; i++) { ma += a[i]; mb += b[i]; } ma /= n; mb /= n;
+  let sab = 0, saa = 0, sbb = 0; for (let i = 0; i < n; i++) { const x = a[i] - ma, y = b[i] - mb; sab += x * y; saa += x * x; sbb += y * y; }
+  return sab / Math.sqrt(saa * sbb);
+}
+const meanRatio = (from, to) => { const v = both.filter(r => r.d >= from && r.d < to).map(r => r.r); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+const ratioOn = (d) => { let best = null; for (const r of both) { if (r.d <= d) best = r; else break; } return best; };
+
+function init(data) {
+  rows = data.rows.map(([d, k, p]) => ({ d, k, p }));
+  both = rows.filter(r => r.k && r.p).map(r => ({ ...r, r: r.k / r.p }));
+  for (let i = 1; i < both.length; i++) { both[i].lk = Math.log(both[i].k / both[i - 1].k); both[i].lp = Math.log(both[i].p / both[i - 1].p); }
+  for (let i = 90; i < both.length; i++) { const w = both.slice(i - 89, i + 1); both[i].c = corrOf(w.map(x => x.lk), w.map(x => x.lp)); }
+  const last = both[both.length - 1];
+  const twoY = addMonths(last.d, -24);
+  $("src").insertAdjacentHTML("afterbegin", "Updated " + fmtD(data.updated.slice(0, 10)) + ". ");
+
+  // Claim 1: correlation of daily moves, last two years
+  const w2 = both.filter(r => r.d > twoY && r.lk != null);
+  const c2y = corrOf(w2.map(x => x.lk), w2.map(x => x.lp));
+  const wa = both.filter(r => r.d >= CAP && r.lk != null);
+  const cAfter = corrOf(wa.map(x => x.lk), wa.map(x => x.lp));
+  $("c1").innerHTML = c2y.toFixed(2) + "<small> correlation</small>";
+  $("c1a").textContent = "Daily price moves over the last two years, where 1 would mean identical. Since the cap: " + cAfter.toFixed(2) + ". On most days, when DOT goes up or down, KSM goes the same way.";
+  $("c1v").textContent = c2y > 0.7 ? "Holds" : "Weak"; $("c1v").className = "verdict " + (c2y > 0.7 ? "yes" : "part");
+
+  // Claim 2: average ratio, same window either side
+  const months = monthsSince(CAP, last.d);
+  $("win").max = Math.max(1, months); $("win").value = Math.max(1, months); $("winLbl").textContent = $("win").value;
+  const before = meanRatio(addMonths(CAP, -months), CAP), after = meanRatio(CAP, "9999");
+  $("c2").innerHTML = pct(after / before - 1) + "<small> average</small>";
+  $("c2a").textContent = "One KSM averaged " + after.toFixed(2) + " DOT in the " + months + " months since the cap, against " + before.toFixed(2) + " in the " + months + " months before.";
+  const ok2 = after > before; $("c2v").textContent = ok2 ? "Holds, narrowly" : "Does not hold"; $("c2v").className = "verdict " + (ok2 ? "yes" : "part");
+
+  // Claim 3: ratio on the day vs today, with the longer baseline
+  const onCap = ratioOn(CAP), pre = meanRatio(addMonths("2025-08-15", -12), "2025-08-15");
+  $("c3").innerHTML = pct(last.r / onCap.r - 1) + "<small> since 14 Mar</small>";
+  $("c3a").textContent = "One KSM bought " + onCap.r.toFixed(2) + " DOT the day the cap took effect and " + last.r.toFixed(2) + " today. But in the year before the cap was proposed it averaged " + pre.toFixed(2) + ".";
+  const ok3 = last.r >= onCap.r; $("c3v").textContent = ok3 ? (last.r < pre ? "Holds from 14 Mar only" : "Holds") : "Does not hold"; $("c3v").className = "verdict " + (ok3 && last.r >= pre ? "yes" : "part");
+
+  table(); compare(); wire(); draw();
+  requestAnimationFrame(() => document.querySelectorAll(".bar i").forEach(i => i.style.width = i.dataset.w + "%"));
+}
+
+function monthsSince(a, b) { return Math.max(1, Math.round((Date.parse(b) - Date.parse(a)) / 864e5 / 30.44)); }
+
+function compare() {
+  const m = +$("win").value; $("winLbl").textContent = m;
+  const b = meanRatio(addMonths(CAP, -m), CAP), a = meanRatio(CAP, addMonths(CAP, m));
+  $("bLbl").textContent = "Average KSM in DOT, " + m + " month" + (m > 1 ? "s" : "") + " before";
+  $("aLbl").textContent = "Average KSM in DOT, " + m + " month" + (m > 1 ? "s" : "") + " after";
+  $("bVal").textContent = b.toFixed(2); $("aVal").textContent = a.toFixed(2); $("dVal").textContent = pct(a / b - 1);
+  const pre = meanRatio(addMonths("2025-08-15", -12), "2025-08-15");
+  $("baseline").textContent = "For a longer view: in the twelve months before the cap was proposed, one KSM averaged " + pre.toFixed(2) + " DOT. The months since the cap sit " + Math.abs((a / pre - 1) * 100).toFixed(0) + "% " + (a < pre ? "below" : "above") + " that. Most of the slide came before the cap took effect, not after.";
+}
+
+function table() {
+  const tb = $("tbl").querySelector("tbody"), byM = new Map();
+  for (const r of both) byM.set(r.d.slice(0, 7), r);
+  const frag = document.createDocumentFragment();
+  [...byM.values()].reverse().forEach(r => { const tr = document.createElement("tr"); tr.innerHTML = `<td>${fmtD(r.d)}</td><td>${usd(r.k)}</td><td>${usd(r.p)}</td><td>${r.r.toFixed(2)}</td>`; frag.appendChild(tr); });
+  tb.appendChild(frag);
+}
+
+function wire() {
+  document.querySelectorAll("[data-view]").forEach(b => b.onclick = () => { state.view = b.dataset.view; press("view"); draw(); });
+  document.querySelectorAll("[data-range]").forEach(b => b.onclick = () => { state.range = b.dataset.range; press("range"); draw(); });
+  document.querySelectorAll("[data-base]").forEach(b => b.onclick = () => { state.base = b.dataset.base; press("base"); draw(); });
+  $("win").oninput = compare;
+  let t; addEventListener("resize", () => { clearTimeout(t); t = setTimeout(draw, 150); });
+}
+function press(k) { document.querySelectorAll(`[data-${k}]`).forEach(b => b.setAttribute("aria-pressed", b.dataset[k] === state[k])); }
+
+function draw() {
+  const svg = $("chart"); while (svg.childNodes.length > 1) svg.removeChild(svg.lastChild);
+  const W = Math.max(320, $("wrap").clientWidth - 20), H = W < 600 ? 300 : 420;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const m = { l: 46, r: 14, t: 28, b: 28 }, iw = W - m.l - m.r, ih = H - m.t - m.b;
+  const last = both[both.length - 1].d;
+  const from = state.range === "all" ? both[0].d : state.range === "2y" ? addMonths(last, -24) : addMonths("2025-08-15", -1);
+  const vis = both.filter(r => r.d >= from);
+  $("baseRow").hidden = state.view !== "index";
+  let series, log = false, yfmt, lines = [], cap;
+
+  if (state.view === "ratio") {
+    series = [{ key: "r", c: "var(--ink)", name: "KSM in DOT" }];
+    log = state.range === "all"; yfmt = (v) => v.toFixed(v < 10 ? 1 : 0);
+    cap = "How many DOT one KSM would buy each day. Rising means KSM gaining on DOT. The shaded area is after the cap took effect" + (log ? ". Log scale, so equal steps are equal percentage moves." : ".");
+  } else if (state.view === "index") {
+    const bd = EV.find(e => e.k === state.base).d, b = ratioOn(bd);
+    vis.forEach(r => { r.ik = 100 * r.k / b.k; r.ip = 100 * r.p / b.p; });
+    series = [{ key: "ik", c: "var(--ksm)", name: "KSM" }, { key: "ip", c: "var(--dot)", name: "DOT" }];
+    log = state.range === "all"; yfmt = (v) => v >= 1000 ? (v / 1000).toFixed(0) + "k" : v.toFixed(0); lines.push(100);
+    cap = "Both US dollar prices set to 100 on " + fmtD(b.d) + ", so you can see which went further from the same starting line. Above 100 is a gain since then, below is a loss" + (log ? ". Log scale." : ".");
+  } else {
+    series = [{ key: "c", c: "var(--ink)", name: "90-day correlation" }];
+    yfmt = (v) => v.toFixed(1); lines.push(0);
+    cap = "Correlation of daily price moves over the previous 90 days. Near 1, KSM and DOT move together almost every day.";
+  }
+  $("caption").textContent = cap;
+  $("legend").innerHTML = series.length > 1 ? series.map(s => `<span style="--c:${s.c}">${s.name}</span>`).join("") : "";
+
+  const pts = vis.filter(r => series.every(s => r[s.key] != null));
+  if (!pts.length) return;
+  let lo = Infinity, hi = -Infinity; pts.forEach(r => series.forEach(s => { lo = Math.min(lo, r[s.key]); hi = Math.max(hi, r[s.key]); }));
+  lines.forEach(v => { lo = Math.min(lo, v); hi = Math.max(hi, v); });
+  if (state.view === "corr") { lo = Math.min(lo, 0); hi = 1; }
+  const t0 = Date.parse(pts[0].d), t1 = Date.parse(pts[pts.length - 1].d);
+  const X = (d) => m.l + (Date.parse(d) - t0) / (t1 - t0) * iw;
+  let Y, ticks;
+  if (log) {
+    const a = Math.log(lo * 0.92), b = Math.log(hi * 1.08); Y = (v) => m.t + ih - (Math.log(v) - a) / (b - a) * ih;
+    const cand = [1, 1.5, 2, 3, 4, 5, 7, 10, 15, 20, 30, 50, 70, 100, 150, 200, 300, 500, 700, 1000, 1500, 2000, 3000, 5000, 10000, 20000, 30000];
+    ticks = cand.filter(v => v >= lo * 0.92 && v <= hi * 1.08); while (ticks.length > 7) ticks = ticks.filter((_, i) => i % 2 === 0);
+  } else {
+    const pad = (hi - lo) * 0.08 || 1; const a = lo - pad, b = hi + pad; Y = (v) => m.t + ih - (v - a) / (b - a) * ih;
+    const step = niceStep((b - a) / 5); ticks = []; for (let v = Math.ceil(a / step) * step; v <= b; v += step) ticks.push(+v.toFixed(6));
+  }
+  const g = el("g", { class: "grid axis" });
+  ticks.forEach(v => { g.appendChild(el("line", { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v) })); g.appendChild(el("text", { x: m.l - 8, y: Y(v) + 4, "text-anchor": "end" }, yfmt(v))); });
+  svg.appendChild(g);
+  // after-cap shading
+  if (CAP >= pts[0].d) svg.appendChild(el("rect", { class: "after", x: X(CAP), y: m.t, width: W - m.r - X(CAP), height: ih }));
+  lines.forEach(v => svg.appendChild(el("line", { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), stroke: "#9aa7b0", "stroke-width": 1 })));
+  // x axis years / months
+  const ax = el("g", { class: "axis" }); const span = (t1 - t0) / 864e5;
+  const y0 = new Date(t0).getUTCFullYear(), y1 = new Date(t1).getUTCFullYear();
+  if (span > 800) { for (let y = y0 + 1; y <= y1; y++) { const d = y + "-01-01"; ax.appendChild(el("text", { x: X(d), y: H - 8, "text-anchor": "middle" }, y)); } }
+  else { let d = pts[0].d.slice(0, 7) + "-01"; d = addMonths(d, 1); const stepM = span > 400 ? 3 : 2; while (d <= pts[pts.length - 1].d) { ax.appendChild(el("text", { x: X(d), y: H - 8, "text-anchor": "middle" }, new Date(d + "T00:00:00Z").toLocaleDateString("en-GB", { month: "short", year: "2-digit", timeZone: "UTC" }))); d = addMonths(d, stepM); } }
+  svg.appendChild(ax);
+  // events
+  const evg = el("g", { class: "ev" }); let lastX = -1e9, row = 0;
+  EV.forEach(e => { if (e.d < pts[0].d) return; const x = X(e.d); row = x - lastX < 90 ? row + 1 : 0; lastX = x;
+    evg.appendChild(el("line", { x1: x, x2: x, y1: m.t - 4 + row * 13, y2: m.t + ih }));
+    const anchor = x > W - 110 ? "end" : "start";
+    evg.appendChild(el("text", { x: x + (anchor === "start" ? 5 : -5), y: m.t - 8 + row * 13, "text-anchor": anchor }, e.t)); });
+  svg.appendChild(evg);
+  // lines
+  series.forEach(s => { let dpath = ""; pts.forEach((r, i) => { dpath += (i ? "L" : "M") + X(r.d).toFixed(1) + " " + Y(r[s.key]).toFixed(1); });
+    svg.appendChild(el("path", { d: dpath, fill: "none", stroke: s.c, "stroke-width": 2, "stroke-linejoin": "round" })); });
+  // direct labels at line ends
+  series.forEach(s => { const r = pts[pts.length - 1]; svg.appendChild(el("circle", { cx: X(r.d), cy: Y(r[s.key]), r: 4, fill: s.c, stroke: "#fff", "stroke-width": 2 })); });
+  // hover
+  const cross = el("line", { y1: m.t, y2: m.t + ih, stroke: "#202a31", "stroke-width": 1, opacity: 0 }); svg.appendChild(cross);
+  const dots = series.map(s => { const c = el("circle", { r: 4, fill: s.c, stroke: "#fff", "stroke-width": 2, opacity: 0 }); svg.appendChild(c); return c; });
+  const hit = el("rect", { x: m.l, y: m.t, width: iw, height: ih, fill: "transparent" }); svg.appendChild(hit);
+  const tip = $("tip");
+  const move = (ev) => {
+    const pt = svg.getBoundingClientRect(), sx = (ev.clientX - pt.left) * W / pt.width;
+    const t = t0 + (sx - m.l) / iw * (t1 - t0); let lo2 = 0, hi2 = pts.length - 1;
+    while (hi2 - lo2 > 1) { const mid = (lo2 + hi2) >> 1; Date.parse(pts[mid].d) < t ? lo2 = mid : hi2 = mid; }
+    const r = Math.abs(Date.parse(pts[lo2].d) - t) < Math.abs(Date.parse(pts[hi2].d) - t) ? pts[lo2] : pts[hi2];
+    const x = X(r.d); cross.setAttribute("x1", x); cross.setAttribute("x2", x); cross.setAttribute("opacity", .35);
+    series.forEach((s, i) => { dots[i].setAttribute("cx", x); dots[i].setAttribute("cy", Y(r[s.key])); dots[i].setAttribute("opacity", 1); });
+    let h = `<b>${fmtD(r.d)}</b><br>`;
+    if (state.view === "index") h += series.map(s => `<span class="sw" style="background:${s.c}"></span>${s.name} ${r[s.key].toFixed(0)} <span class="muted">(${usd(s.key === "ik" ? r.k : r.p)})</span>`).join("<br>");
+    else if (state.view === "corr") h += `Correlation ${r.c.toFixed(2)}`;
+    else h += `1 KSM = <b>${r.r.toFixed(2)}</b> DOT<br><span class="muted">KSM ${usd(r.k)} · DOT ${usd(r.p)}</span>`;
+    tip.innerHTML = h; tip.style.opacity = 1;
+    const px = x / W * pt.width + 10, tw = tip.offsetWidth;
+    tip.style.left = (px + tw + 30 > pt.width ? px - tw - 20 : px + 10) + "px"; tip.style.top = (Y(r[series[0].key]) / H * pt.height - 10) + "px";
+  };
+  hit.addEventListener("pointermove", move); hit.addEventListener("pointerdown", move);
+  hit.addEventListener("pointerleave", () => { tip.style.opacity = 0; cross.setAttribute("opacity", 0); dots.forEach(d => d.setAttribute("opacity", 0)); });
+}
+function niceStep(raw) { const p = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / p; return (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * p; }
+})();
+</script>
+</body>
+</html>
