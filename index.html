@@ -29,7 +29,7 @@ h1{font-size:clamp(36px,4.4vw,56px);margin:20px 0 24px;max-width:820px}
 h2{font-size:clamp(26px,2.8vw,36px);margin:12px 0 18px}
 h3{font-size:20px;margin:0 0 8px;letter-spacing:-.02em}
 p{max-width:680px}
-.hero{padding:28px 0 20px}
+.hero{padding:36px 0 24px}
 .lead{font-size:18px;color:var(--muted);max-width:660px}
 section{padding:32px 0;border-top:1px solid var(--line)}
 blockquote{margin:0;border-left:2px solid var(--line);padding:4px 0 4px 18px;color:var(--muted);max-width:720px}
@@ -42,7 +42,7 @@ blockquote cite{font-style:normal;font-size:13px}
 .big{font-size:clamp(34px,3.6vw,46px);letter-spacing:-.04em;line-height:1.05;font-variant-numeric:tabular-nums}
 .big small{font-size:.4em;letter-spacing:0;color:var(--muted)}
 .claims .a{font-size:14px;margin:10px 0 0}
-.verdict{display:inline-block;border:1px solid #bfc9d0;border-radius:30px;padding:2px 11px;font:11px/1.8 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.1em;margin-top:12px}
+.verdict{display:inline-block;border:1px solid #bfc9d0;border-radius:4px;padding:4px 9px;font:12px/1.5 Inter,Arial,sans-serif;letter-spacing:0;margin-top:12px}
 .verdict.yes{border-color:rgba(16,185,129,.7)}.verdict.part{border-color:rgba(245,158,11,.8)}
 .controls{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;margin:8px 0 14px}
 .seg{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:40px;padding:4px;background:#fff;flex-wrap:wrap}
@@ -114,11 +114,48 @@ Birdbrain <span class="experiment">EXPERIMENT</span></a>
 <div class="hero">
   <div class="eyebrow muted">Kusama and Polkadot</div>
   <h1>KSM and DOT, before and after the cap</h1>
-  <p class="lead">On 14 March 2026 Polkadot cut new DOT by more than half and capped the supply at 2.1 billion. Kusama kept issuing at about 10% a year. If issuance drives price, KSM should have lost ground to DOT since then. Here is what the prices say.</p>
+  <p class="lead">On 14 March 2026 Polkadot cut new DOT by more than half and capped the supply at 2.1 billion. Kusama kept issuing at about 10% a year. Compare their prices before and after the change. The starting date matters, and prices alone cannot tell us what caused a change.</p>
+  <p id="err" hidden></p>
+</div>
+
+<section id="chartsec">
+  <h2>KSM against DOT, day by day</h2>
+  <div class="controls">
+    <div class="seg" role="group" aria-label="View"><span class="eyebrow">Show</span>
+      <button data-view="ratio" aria-pressed="true">Exchange ratio</button>
+      <button data-view="index" aria-pressed="false">Relative prices</button>
+      <button data-view="corr" aria-pressed="false">Move together</button>
+    </div>
+    <div class="seg" role="group" aria-label="Time range"><span class="eyebrow">Period</span>
+      <button data-range="all" aria-pressed="false">All history</button>
+      <button data-range="2y" aria-pressed="false">2 years</button>
+      <button data-range="prop" aria-pressed="true">Around the proposal</button>
+    </div>
+  </div>
+  <div class="controls" id="baseRow" hidden>
+    <div class="seg" role="group" aria-label="Start both prices at"><span class="eyebrow">Start at</span>
+      <button data-base="prop" aria-pressed="false">Proposed</button>
+      <button data-base="vote" aria-pressed="false">Approved</button>
+      <button data-base="cap" aria-pressed="true">In force</button>
+    </div>
+  </div>
+  <div class="chartwrap" id="wrap">
+    <svg class="chart" id="chart" viewBox="0 0 1000 420" role="img" aria-labelledby="chartTitle"><title id="chartTitle">KSM priced in DOT</title></svg>
+    <div class="tip" id="tip"></div>
+  </div>
+  <div class="legend" id="legend"></div>
+  <p class="caption" id="caption"></p>
+</section>
+
+<section id="findings">
+  <h2>What the prices show</h2>
+  <details>
+    <summary>The claim behind this comparison</summary>
   <blockquote>
     <p>"Over the last couple of years, KSM has traded highly correlated with DOT's price against other tokens &amp; fiat. And 8 months of data isn't a lot, but KSM/DOT is doing better than it was before DOT switched to fixed supply cap model. … I'm at least comfortable to claim that KSM held its ground relative to DOT."</p>
     <cite>Lederstrumpf, <a href="https://forum.polkadot.network/t/proposal-discussion-adapting-kusama-to-demand-and-its-jam-future/17141/23">Polkadot forum, 13 November 2026</a></cite>
   </blockquote>
+  </details>
   <div class="claims" id="claims">
     <article>
       <p class="q">1. KSM moves with DOT</p>
@@ -139,36 +176,6 @@ Birdbrain <span class="experiment">EXPERIMENT</span></a>
       <span class="verdict" id="c3v"></span>
     </article>
   </div>
-  <p id="err" hidden></p>
-</div>
-
-<section id="chartsec">
-  <h2>KSM against DOT, day by day</h2>
-  <div class="controls">
-    <div class="seg" role="group" aria-label="View"><span class="eyebrow">Show</span>
-      <button data-view="ratio" aria-pressed="true">KSM in DOT</button>
-      <button data-view="index" aria-pressed="false">Both prices from one start</button>
-      <button data-view="corr" aria-pressed="false">How closely they move</button>
-    </div>
-    <div class="seg" role="group" aria-label="Time range"><span class="eyebrow">Since</span>
-      <button data-range="all" aria-pressed="false">Launch</button>
-      <button data-range="2y" aria-pressed="false">2 years</button>
-      <button data-range="prop" aria-pressed="true">The proposal</button>
-    </div>
-  </div>
-  <div class="controls" id="baseRow" hidden>
-    <div class="seg" role="group" aria-label="Start both prices at"><span class="eyebrow">Start at</span>
-      <button data-base="prop" aria-pressed="false">Proposed</button>
-      <button data-base="vote" aria-pressed="false">Approved</button>
-      <button data-base="cap" aria-pressed="true">In force</button>
-    </div>
-  </div>
-  <div class="chartwrap" id="wrap">
-    <svg class="chart" id="chart" viewBox="0 0 1000 420" role="img" aria-labelledby="chartTitle"><title id="chartTitle">KSM priced in DOT</title></svg>
-    <div class="tip" id="tip"></div>
-  </div>
-  <div class="legend" id="legend"></div>
-  <p class="caption" id="caption"></p>
 </section>
 
 <section>
@@ -188,7 +195,7 @@ Birdbrain <span class="experiment">EXPERIMENT</span></a>
 </section>
 
 <section>
-  <h2>What each chain is issuing now</h2>
+  <h2>Supply growth measured May–November 2026</h2>
   <p>Measured from each chain's total supply on Asset Hub, 18 May to 13 November 2026, then annualised.</p>
   <div class="supply">
     <article style="--c:var(--ksm)">
@@ -204,12 +211,12 @@ Birdbrain <span class="experiment">EXPERIMENT</span></a>
       <p class="muted">About 56 million new DOT a year on 1.71 billion, down from 120 million before 14 March 2026. Capped at 2.1 billion, stepping down every two years.</p>
     </article>
   </div>
-  <p class="caption">So since March, new KSM has arrived about three times as fast as new DOT, relative to supply. If that alone set the price, the KSM/DOT line above would be falling.</p>
+  <p class="caption">Over this measurement period, Kusama’s supply grew at about three times Polkadot’s annualised rate. This comparison does not isolate the effect of supply growth on price.</p>
 </section>
 
 <section id="check">
   <h2>Check the numbers</h2>
-  <p>Every figure above is worked out in your browser from one file of daily prices. Download it and do the sums yourself, or run ours.</p>
+  <p>The price comparisons are worked out in your browser from one file of daily prices. Supply growth is measured separately from the chains. Download it and do the sums yourself, or run ours.</p>
   <ul class="notes">
     <li><b>The prices</b> · <a href="/tools/ksm-dot/data.csv" download>CSV</a> or <a href="/tools/ksm-dot/data.json" download>JSON</a>. One row a day: date, KSM in US dollars, DOT in US dollars.</li>
     <li><b>The method</b> · <a href="https://github.com/Birdbrain-wtf/ksm-dot">github.com/Birdbrain-wtf/ksm-dot</a>. Three short Python scripts with nothing to install: one redoes every figure on this page, one reads each chain's supply at the blocks we used, one checks the prices against CoinGecko.</li>
@@ -222,8 +229,8 @@ cd ksm-dot &amp;&amp; python3 verify.py</code></pre>
 <section>
   <h2>What this shows and what it does not</h2>
   <ul class="notes">
-    <li>Prices are one daily close in US dollars. KSM in DOT is the KSM price divided by the DOT price. Dividing removes whatever moves the whole market, which is why it is the fair test.</li>
-    <li>"How closely they move" is the correlation of daily price changes over the last 90 days: 1 means they always move together, 0 means no relationship.</li>
+    <li>Prices are one daily close in US dollars. KSM in DOT is the KSM price divided by the DOT price. The ratio shows their relative price. It does not remove every market influence or isolate the effect of issuance.</li>
+    <li>"How closely they move" is the correlation of daily price changes over the last 90 days: 1 means a perfect positive linear relationship, not identical returns. Zero means no linear relationship.</li>
     <li>Eight months is short. Prices answer to many things at once, so this cannot prove that issuance does not matter. It can show whether the effect people predicted is visible yet.</li>
     <li>Where you start counting changes the answer. Measured from the day the cap took effect, KSM has gained on DOT. Measured against the year before the cap was proposed, KSM buys fewer DOT than it did. Both are on this page.</li>
     <li>The issuance figures are a fixed reading, not live. Everything else updates once a day.</li>
@@ -289,8 +296,8 @@ function init(data) {
   const wa = both.filter(r => r.d >= CAP && r.lk != null);
   const cAfter = corrOf(wa.map(x => x.lk), wa.map(x => x.lp));
   $("c1").innerHTML = c2y.toFixed(2) + "<small> correlation</small>";
-  $("c1a").textContent = "Daily price moves over the last two years, where 1 would mean identical. Since the cap: " + cAfter.toFixed(2) + ". On most days, when DOT goes up or down, KSM goes the same way.";
-  $("c1v").textContent = c2y > 0.7 ? "Holds" : "Weak"; $("c1v").className = "verdict " + (c2y > 0.7 ? "yes" : "part");
+  $("c1a").textContent = "Daily price moves over the last two years, where 1 means a perfect positive linear relationship. Since the cap: " + cAfter.toFixed(2) + ". On most days, when DOT goes up or down, KSM goes the same way.";
+  $("c1v").textContent = c2y > 0.7 ? "Move closely together" : "Less closely linked"; $("c1v").className = "verdict " + (c2y > 0.7 ? "yes" : "part");
 
   // Claim 2: average ratio, same window either side
   const months = monthsSince(CAP, last.d);
@@ -298,13 +305,13 @@ function init(data) {
   const before = meanRatio(addMonths(CAP, -months), CAP), after = meanRatio(CAP, "9999");
   $("c2").innerHTML = pct(after / before - 1) + "<small> average</small>";
   $("c2a").textContent = "One KSM averaged " + after.toFixed(2) + " DOT in the " + months + " months since the cap, against " + before.toFixed(2) + " in the " + months + " months before.";
-  const ok2 = after > before; $("c2v").textContent = ok2 ? "Holds, narrowly" : "Does not hold"; $("c2v").className = "verdict " + (ok2 ? "yes" : "part");
+  const ok2 = after > before; $("c2v").textContent = ok2 ? "Higher average" : "Lower or equal average"; $("c2v").className = "verdict " + (ok2 ? "yes" : "part");
 
   // Claim 3: ratio on the day vs today, with the longer baseline
   const onCap = ratioOn(CAP), pre = meanRatio(addMonths("2025-08-15", -12), "2025-08-15");
   $("c3").innerHTML = pct(last.r / onCap.r - 1) + "<small> since 14 Mar</small>";
   $("c3a").textContent = "One KSM bought " + onCap.r.toFixed(2) + " DOT the day the cap took effect and " + last.r.toFixed(2) + " today. But in the year before the cap was proposed it averaged " + pre.toFixed(2) + ".";
-  const ok3 = last.r >= onCap.r; $("c3v").textContent = ok3 ? (last.r < pre ? "Holds from 14 Mar only" : "Holds") : "Does not hold"; $("c3v").className = "verdict " + (ok3 && last.r >= pre ? "yes" : "part");
+  const ok3 = last.r >= onCap.r; $("c3v").textContent = ok3 ? (last.r < pre ? "Depends on the starting date" : "Above both baselines") : "Below the cap-day level"; $("c3v").className = "verdict " + (ok3 && last.r >= pre ? "yes" : "part");
 
   table(); compare(); wire(); draw();
   requestAnimationFrame(() => document.querySelectorAll(".bar i").forEach(i => i.style.width = i.dataset.w + "%"));
@@ -340,6 +347,7 @@ function wire() {
 function press(k) { document.querySelectorAll(`[data-${k}]`).forEach(b => b.setAttribute("aria-pressed", b.dataset[k] === state[k])); }
 
 function draw() {
+  $("chartTitle").textContent = state.view === "ratio" ? "KSM priced in DOT" : state.view === "index" ? "Relative KSM and DOT prices" : "90-day correlation of daily price changes";
   const svg = $("chart"); while (svg.childNodes.length > 1) svg.removeChild(svg.lastChild);
   const W = Math.max(320, $("wrap").clientWidth - 20), H = W < 600 ? 300 : 420;
   svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
@@ -363,7 +371,7 @@ function draw() {
   } else {
     series = [{ key: "c", c: "var(--ink)", name: "90-day correlation" }];
     yfmt = (v) => v.toFixed(1); lines.push(0);
-    cap = "Correlation of daily price moves over the previous 90 days. Near 1, KSM and DOT move together almost every day.";
+    cap = "Correlation of daily price moves over the previous 90 days. Near 1 means a strong positive linear relationship, not identical returns.";
   }
   $("caption").textContent = cap;
   $("legend").innerHTML = series.length > 1 ? series.map(s => `<span style="--c:${s.c}">${s.name}</span>`).join("") : "";

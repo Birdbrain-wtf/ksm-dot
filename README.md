@@ -43,8 +43,8 @@ The commit history of `data/` is the record of what the page showed on each day.
 
 ## How the numbers are made
 
-- **KSM in DOT** is the KSM price divided by the DOT price on the same day. Dividing cancels out
-  whatever moves the whole market, which is why it is the fair test of one against the other.
+- **KSM in DOT** is the KSM price divided by the DOT price on the same day. The ratio shows their
+  relative price. It does not remove every market influence or isolate the effect of issuance.
 - **How closely they move** is the Pearson correlation of daily log returns, ln(price today /
   price yesterday), for each coin over the same days.
 - **Before and after** are plain averages of KSM in DOT over the same number of months either side
